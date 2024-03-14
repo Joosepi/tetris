@@ -35,6 +35,7 @@ function initGame () {
                 currentBlock.stop();
                 gameBoard.checkRows();
                 gameBoard.addNewBlock();
+                gameBoard.addNextBlock();
             }
         }
         gameBoard.draw();

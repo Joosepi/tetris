@@ -14,16 +14,24 @@ body {
     height: fit-content;
 }
 
-#gameboard {
+#gameboard, #next-block {
     border-collapse: collapse;
 }
 
-#gameboard td {
+#gameboard td, #next-block td {
     border: solid 1px gray;
     padding: 0px;
     width: 24px;
     height: 24px;
     font-size: 10px;
+}
+
+#next-block {
+    margin-left: 3rem;
+}
+
+#next-block td {
+    border: solid 1px white;
 }
 
 #message {
@@ -48,6 +56,8 @@ body {
     left: 50%;
     /* bring your own prefixes */
     transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
   }
 
 #score {

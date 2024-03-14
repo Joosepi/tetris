@@ -12,9 +12,11 @@ class GameBoard {
 
     state = [];
     gameBoardTable = document.getElementById('gameboard');
+    nextBoardTable = document.getElementById('next-block');
     boardSizeX;
     boardSizeY;
     currentBlock;
+    nextBlock;
 
     constructor ( boardSizeX, boardSizeY ) {
 
@@ -37,9 +39,12 @@ class GameBoard {
                     this.currentBlock.nextPose();
                     this.draw();
                     break;
-                // case 'ArrowDown':
-                //     direction = 'd';
-                //     break;
+                case 'ArrowDown':
+                    if ( this.currentBlock.canGoDown(this.state) ) {
+                        this.currentBlock.moveDown();
+                        this.draw();
+                    }
+                    break;
                 case 'ArrowLeft':
                     if ( this.currentBlock.canGoLeft(this.state) ) {
                         this.currentBlock.moveLeft();
@@ -56,7 +61,7 @@ class GameBoard {
         });
     }
 
-    draw() {
+    draw () {
 
         this.gameBoardTable.innerHTML = '';
         
@@ -87,6 +92,32 @@ class GameBoard {
         // scoreDiv.innerText = 'Score: ' + score;
     }
 
+    addNextBlock () {
+        
+        this.nextBoardTable.innerHTML = '';
+
+        const width = this.nextBlock.calculateWidth();
+        const height = this.nextBlock.calculateHeight();
+
+        for ( let y = 0; y < height; y++ ) {
+            const boardRowTr = document.createElement('tr');
+            for ( let x = 0; x < width; x++ ) {
+                const boardCellTd = document.createElement('td');
+
+                this.nextBlock.shape[0].forEach( el => {
+                    if ( el[0] == y && el[1] == x ) {
+                        boardCellTd.classList.add(this.nextBlock.class);
+                    }
+                });
+
+                boardRowTr.append(boardCellTd);
+            }
+
+            this.nextBoardTable.append(boardRowTr);
+        }
+
+    }
+
     getState () {
         return this.state;
     }
@@ -96,8 +127,17 @@ class GameBoard {
     }
 
     addNewBlock() {
+        
+        if ( this.nextBlock == undefined ) {
+            const i = Math.floor(Math.random() * 7);
+            this.currentBlock = new this.allBlocks[i](this.boardSizeX, this.boardSizeY);
+        } else { 
+            this.currentBlock = this.nextBlock;
+        }
+
         const i = Math.floor(Math.random() * 7);
-        this.currentBlock = new this.allBlocks[i](this.boardSizeX, this.boardSizeY);
+        this.nextBlock = new this.allBlocks[i](this.boardSizeX, this.boardSizeY);
+
     }
 
     addBlockToState ( block ) {
